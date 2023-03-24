@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *,::after,::before{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        body{
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+        
+        header{
+            text-align: center;
+            padding: 20px 10px;
+            margin-bottom: 20px;
+        }
+        
+        a{
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+        }
+        
+        section {
+            text-align: center;
+        }
+        
+        .main-wrapper{
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .main-section {
+            background-image: url("./images/pexels-boys-in-bristol-photography-12488674.jpg");  
+            background-repeat: no-repeat;
+            background-size: cover;  
+            height: 100vh;
+        }
+        
+        header nav > a{
+            padding: 5px 15px;
+        }
+        
+        .weather-details-container  table  tr td:nth-child(2) {
+            text-align: right;
+        }
+        
+        .weather-details-container  table  tr td:nth-child(1) {
+            text-align: left;
+        }
+        
+        .weather-details-container  table  tr td,
+        .weather-details-container  table  tr th{
+            padding: 10px 20px;
+        }
+        
+        .weather-details-container  table  tr th{
+            padding: 20px 20px;
+        }
+        
+        .weather-details-wrapper {
+            display: flex;
+            justify-content: end;
+        }   
+        .weather-details-container {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            display: inline-block;
+        }
+        
+        .weather-details-container .title {
+            padding: 20px 0px;
+        }
+        
+        .weather-temp{
+            font-size: 100px;
+            font-weight:bold;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+        
+        .weather-city{
+            font-size: 40px;
+            text-align: left;
+        }
+        .main-weather-container{
+            display: flex;
+            align-items: center;
+        }
+        .loc-details{
+            display: flex;
+            font-size: 12px;
+        }
+        .loc-details div{
+            padding: 5px 6px;
+        }
+        
+        .weather-temp-details-wrapper{
+            display: flex;
+            align-items: center;
+        }
+        
+        .city-section {
+            color: black;
+        }
+    </style>
+    
+    <script>
+        var cityDetails;
+
+        function getCityTemp(locCity = 'mumbai') {
+
+             const API_KEY = 'd56e241b9e4ab5b57b4cdb552955ccd6'
+
+            let city = locCity;
+
+            const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
+
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    
+                cityDetails = {
+
+                    city : city,
+
+                    temp : data.main.temp,
+
+                    humidity : data.main.humidity,
+
+                    cloudy : data.clouds.all,
+
+                    wind : data.wind.speed,
+
+                    currentDate : new Date().getDate(),
+
+                    currentDay : new Date().getDay(),
+
+                    currentHour : new Date().getHours(),
+
+                    currentMonth : new Date().getMonth(),
+                    
+                    currentYear : new Date().getFullYear(),
+
+                    currentWeather: data.weather[0]
+                }
+
+                console.log(cityDetails);
+                
+                document.getElementsByClassName('time')[0].textContent = Math.round((cityDetails.currentHour/24) *  10);
+                document.getElementsByClassName('date')[0].textContent = `${cityDetails.currentDate}/${cityDetails.currentMonth}/${cityDetails.currentYear}`;
+                document.getElementById('cloudy').getElementsByTagName('td')[1].textContent = `${cityDetails.cloudy}%`;
+                document.getElementById('humidity').getElementsByTagName('td')[1].textContent =  `${cityDetails.humidity}%`;
+                document.getElementById('wind').getElementsByTagName('td')[1].textContent = `${cityDetails.wind}km/hr` ;
+                 
+        
+
+                return cityDetails;
+
+
+            })
+                .catch(error => console.log(error));
+
+        }
+
+        getCityTemp()
+
+        
+    </script>
+    
+
+</head>
+<body>
+    <section class="main-section">
+        <div class="main-wrapper">
+            <header>
+                <nav>
+                    <a href="#">Home</a>
+                    <a href="#">Cities</a>
+                    <a href="#">News</a>
+                </nav>
+            </header>
+            <main>
+                <div class="weather-details-wrapper">
+                    <div class="weather-details-container">
+                        <table>
+                            <tr>
+                                <th>Weather Details</th>
+                                <th></th>
+                            </tr>
+                            <tr id="cloudy">
+                                <td>Cloudy</td>
+                                <td></td>
+                            </tr>
+                            <tr id="humidity">
+                                <td>Humidity</td>
+                                <td></td>
+                            </tr>
+                            <tr id="wind">
+                                <td>Wind</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="main-weather-wrapper">
+                    <div class="main-weather-container">
+                        <div class="weather-temp">32&deg;</div>
+                        <div class="weather-temp-details-wrapper">
+                            <div class="weather-temp-details">
+                                <div class="weather-city">Mumbai</div>
+                                <div class="loc-details">
+                                    <div class="time"></div>
+                                    <div class="day">Thursday</div>
+                                    <div class="date"></div>
+                                </div>
+                            </div>
+                            <div class="weather-icon-container">
+                                <span>ICON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+    <section class="city-section">
+        <div class="main-wrapper">
+            <h1>Cities</h1>
+            <div class="card-wrapper">
+                <div class="card-container">
+                    
+                </div>
+                <div class="card-container"></div>
+                <div class="card-container"></div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
